@@ -52,7 +52,8 @@ subprojects {
     maven("https://cache-redirector.jetbrains.com/intellij-dependencies")
   }
 
-  val jvmVersion = when {
+  //val jvmVersion = "17"
+  val jvmVersion =  when {
     name.endsWith("jdk17") -> "17"
     else -> targetJvm
   }
