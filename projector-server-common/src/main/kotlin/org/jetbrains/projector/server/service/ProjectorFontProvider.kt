@@ -108,10 +108,27 @@ object ProjectorFontProvider : FontProvider {
 
   override val installedFonts get() = allInstalledFonts
 
+  /**
+   * Returns the default physical font used by the Projector server.
+   * This property provides the default regular font as a PhysicalFont object.
+   */
   override val defaultPhysicalFont: PhysicalFont get() = defaultRegularFont
 
+  /**
+   * Returns the default platform font used by the Projector server.
+   * This property provides the default font name and path as an array of strings.
+   */
   override val defaultPlatformFont: Array<String> get() = arrayOf(DEFAULT_FONT_NAME, DEFAULT_FONT_PATH)
 
+  /**
+   * Finds and returns the Font2D object for the specified font name, style, and fallback.
+   * This function searches for the font in the installed fonts and returns the appropriate Font2D object.
+   *
+   * @param name The name of the font to find.
+   * @param style The style of the font (e.g., Font.PLAIN, Font.BOLD, Font.ITALIC).
+   * @param fallback The fallback value for the font.
+   * @return The Font2D object for the specified font name, style, and fallback.
+   */
   override fun findFont2D(name: String, style: Int, fallback: Int): Font2D {
     when (name) {
       DEFAULT_R_NAME, DEFAULT_RI_NAME, DEFAULT_B_NAME, DEFAULT_BI_NAME -> return when (style) {
@@ -217,4 +234,19 @@ object ProjectorFontProvider : FontProvider {
   private const val DEFAULT_FONT_PATH = DEFAULT_R_PATH
 
   private const val DEFAULT_SIZE = 12
+
+  /**
+   * Summarizes the logical connections between the findFont2D function and the defaultPhysicalFont and defaultPlatformFont properties,
+   * and their roles in rendering the remote interface locally.
+   * The findFont2D function is responsible for finding and returning the Font2D object for the specified font name, style, and fallback.
+   * The defaultPhysicalFont property provides the default regular font as a PhysicalFont object.
+   * The defaultPlatformFont property provides the default font name and path as an array of strings.
+   * Together, these functions and properties ensure that the application can render the remote interface correctly on the local machine.
+   */
+  internal fun summarizeLogicalConnections() {
+    // The findFont2D function is responsible for finding and returning the Font2D object for the specified font name, style, and fallback.
+    // The defaultPhysicalFont property provides the default regular font as a PhysicalFont object.
+    // The defaultPlatformFont property provides the default font name and path as an array of strings.
+    // Together, these functions and properties ensure that the application can render the remote interface correctly on the local machine.
+  }
 }

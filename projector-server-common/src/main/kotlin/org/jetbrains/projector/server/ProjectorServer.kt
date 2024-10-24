@@ -200,7 +200,8 @@ class ProjectorServer private constructor(
         is ReadyClientSettings -> {
           val events = with(clientSettings.setUpClientData) {
             val decompressed = toServerMessageDecompressor.decompress(message)
-            toServerMessageDecoder.decode(decompressed)
+            val decoded = toServerMessageDecoder.decode(decompressed)
+            decoded
           }
 
           events.forEach { processMessage(clientSettings, it) }
@@ -228,6 +229,13 @@ class ProjectorServer private constructor(
     notifyObservers(macLocalConnectionMessage(this, address))
   }
 
+  /**
+   * Creates a new thread that continuously updates the server state.
+   * The thread runs as a daemon and periodically creates data to send to clients,
+   * sends pictures to clients, and flushes drawing commands.
+   *
+   * @return The created update thread.
+   */
   private fun createUpdateThread(): Thread = thread(isDaemon = true) {
     // TODO: remove this thread: encapsulate the logic in an extracted class and maybe even don't use threads but coroutines' channels
     logger.debug { "Daemon thread starts" }
@@ -681,6 +689,12 @@ class ProjectorServer private constructor(
     clientEventHandler.updateClientsCount()
   }
 
+  /**
+   * Sends the given list of server events to all connected clients.
+   * The events are encoded and compressed according to the client's settings.
+   *
+   * @param dataToSend The list of server events to send to clients.
+   */
   private fun sendPictures(dataToSend: List<ServerEvent>) {
     transports.forEach { transport ->
       transport.forEachOpenedConnection { client ->
@@ -716,6 +730,10 @@ class ProjectorServer private constructor(
     return hasDifferentWindowEvents
   }
 
+  /**
+   * Starts the Projector server by initializing the update thread, caret info updater,
+   * and creating transport builders for WebSocket connections.
+   */
   fun start() {
     updateThread = createUpdateThread()
     caretInfoUpdater.start()
@@ -748,6 +766,12 @@ class ProjectorServer private constructor(
     return removed
   }
 
+  /**
+   * Stops the Projector server by stopping all transports, caret info updater,
+   * and interrupting the update thread.
+   *
+   * @param timeout The timeout in milliseconds to wait for transports to stop.
+   */
   @JvmOverloads
   fun stop(timeout: Int = 0) {
     transports.forEach { it.stop(timeout) }
@@ -892,6 +916,17 @@ class ProjectorServer private constructor(
       }
     }
 
+    /**
+     * Starts the Projector server with the specified parameters.
+     * This function initializes the Projector AWT components, general settings, and full settings,
+     * and starts the Projector server.
+     *
+     * @param isAgent Indicates whether the server is running in agent mode.
+     * @param logFactory The logger factory to use for logging.
+     * @param generalInitializer The general initializer to run before starting the server.
+     * @param fullInitializer The full initializer to run before starting the server.
+     * @return The started Projector server instance.
+     */
     @JvmStatic
     fun startServer(isAgent: Boolean, logFactory: (tag: String) -> Logger, generalInitializer: Runnable, fullInitializer: Runnable): ProjectorServer {
       loggerFactory = logFactory

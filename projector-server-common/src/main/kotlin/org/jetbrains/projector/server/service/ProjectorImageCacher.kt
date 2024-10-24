@@ -47,6 +47,14 @@ import javax.imageio.ImageIO
 
 object ProjectorImageCacher : ImageCacher {
 
+  /**
+   * Retrieves the unique identifier for the given image.
+   * This function determines the type of the image and generates an appropriate ImageId.
+   *
+   * @param image The image for which to retrieve the unique identifier.
+   * @param methodName The name of the method calling this function, used for logging purposes.
+   * @return The unique identifier for the given image.
+   */
   override fun getImageId(image: Image, methodName: String): ImageId = when (image) {
     is BufferedImage -> putImage(image)
 
@@ -100,6 +108,13 @@ object ProjectorImageCacher : ImageCacher {
     }
   }
 
+  /**
+   * Adds the given BufferedImage to the image cache and returns its unique identifier.
+   * This function generates an IdentityImageId for the image and stores it in the cache if needed.
+   *
+   * @param image The BufferedImage to add to the cache.
+   * @return The unique identifier for the given BufferedImage.
+   */
   fun putImage(image: BufferedImage): ImageId {
     val id = IdentityImageId(
       identityHash = System.identityHashCode(image),
@@ -111,10 +126,21 @@ object ProjectorImageCacher : ImageCacher {
     return identityIdToImageId[id]!!
   }
 
+  /**
+   * Retrieves the ImageData associated with the given ImageId.
+   * This function looks up the ImageData in the cache using the provided ImageId.
+   *
+   * @param id The unique identifier of the image to retrieve.
+   * @return The ImageData associated with the given ImageId, or null if not found.
+   */
   fun getImage(id: ImageId): ImageData? {
     return idToImage[id]?.data
   }
 
+  /**
+   * Collects and removes garbage images from the cache.
+   * This function filters out null references from the idToImage and identityIdToImageId maps.
+   */
   fun collectGarbage() {
     synchronized(this) {
       filterNullsOutOfMutableMap(idToImage)
@@ -148,6 +174,25 @@ object ProjectorImageCacher : ImageCacher {
         iterator.remove()
       }
     }
+  }
+
+  /**
+   * Summarizes the logical connections between the getImageId, putImage, getImage, and collectGarbage functions,
+   * and their roles in rendering the remote interface locally.
+   * The getImageId function retrieves the unique identifier for the given image.
+   * The putImage function adds the given BufferedImage to the image cache and returns its unique identifier.
+   * The getImage function retrieves the ImageData associated with the given ImageId.
+   * The collectGarbage function collects and removes garbage images from the cache.
+   * Together, these functions ensure that the application can cache, retrieve, and manage images efficiently,
+   * allowing the remote interface to be rendered correctly on the local machine.
+   */
+  internal fun summarizeLogicalConnections() {
+    // The getImageId function retrieves the unique identifier for the given image.
+    // The putImage function adds the given BufferedImage to the image cache and returns its unique identifier.
+    // The getImage function retrieves the ImageData associated with the given ImageId.
+    // The collectGarbage function collects and removes garbage images from the cache.
+    // Together, these functions ensure that the application can cache, retrieve, and manage images efficiently,
+    // allowing the remote interface to be rendered correctly on the local machine.
   }
 }
 

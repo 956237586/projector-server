@@ -34,6 +34,11 @@ import org.jetbrains.projector.common.misc.Defaults as CommonDefaults
 
 object ProjectorAwtInitializer {
 
+  /**
+   * Initializes the Projector AWT components.
+   * This function sets up the DrawEventQueue, FontProvider, and ImageCacher instances
+   * to be used by the Projector server.
+   */
   fun initProjectorAwt() {
     DrawEventQueue.createOffScreen = {
       ProjectorDrawEventQueue(
@@ -51,6 +56,11 @@ object ProjectorAwtInitializer {
     ImageCacher.instance = ProjectorImageCacher
   }
 
+  /**
+   * Initializes the default values for the Projector AWT components.
+   * This function sets the default background color, foreground color, and stroke
+   * to be used by the Projector server.
+   */
   fun initDefaults() {
     Defaults.BACKGROUND_COLOR_ARGB = CommonDefaults.BACKGROUND_COLOR_ARGB.toColor()
     Defaults.FOREGROUND_COLOR_ARGB = CommonDefaults.FOREGROUND_COLOR_ARGB.toColor()

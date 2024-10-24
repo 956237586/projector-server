@@ -36,6 +36,14 @@ open class ProjectorStarter {
 
   companion object {
 
+    /**
+     * Starts the Projector server with the specified arguments and AWT provider.
+     * This function retrieves the main class to launch from the system property,
+     * gets the main method of that class, and invokes it with the provided arguments.
+     *
+     * @param args The arguments to pass to the main method of the class to launch.
+     * @param awtProvider The AWT provider to use for the Projector server.
+     */
     @JvmStatic
     fun start(args: Array<String>, awtProvider: PAwtProvider) {
       val canonicalMainClassName = requireNotNull(System.getProperty(ProjectorLauncherBase.MAIN_CLASS_PROPERTY_NAME)) {
@@ -57,21 +65,46 @@ open class ProjectorStarter {
       return mainClass.getMethod("main", Array<String>::class.java)
     }
 
+    /**
+     * Sets up the singletons required for the Projector server.
+     * This function sets up the AWT toolkit, font manager, and repaint manager.
+     *
+     * @param projectorToolkit The AWT toolkit to be used by the Projector server.
+     */
     private fun setupSingletons(projectorToolkit: Toolkit) {
       setupToolkit(projectorToolkit)
       setupFontManager()
       setupRepaintManager()
     }
 
+    /**
+     * Initializes the general headless settings for the Projector server.
+     * This function sets up the system properties and sets the font provider to non-agent mode.
+     */
     private fun initializeHeadlessGeneral() {
       setupSystemProperties()
       ProjectorFontProvider.isAgent = false
     }
 
+    /**
+     * Initializes the full headless settings for the Projector server.
+     * This function sets up the singletons required for the Projector server.
+     *
+     * @param projectorToolkit The AWT toolkit to be used by the Projector server.
+     */
     private fun initializeHeadlessFull(projectorToolkit: Toolkit) {
       setupSingletons(projectorToolkit)
     }
 
+    /**
+     * Runs the Projector server with the specified AWT provider and logger factory.
+     * This function initializes the headless settings, sets up the singletons,
+     * and starts the Projector server.
+     *
+     * @param awtProvider The AWT provider to use for the Projector server.
+     * @param loggerFactory The logger factory to use for logging.
+     * @return True if the server was started successfully, false otherwise.
+     */
     @JvmStatic
     @JvmOverloads
     fun runProjectorServer(awtProvider: PAwtProvider, loggerFactory: (tag: String) -> Logger = ::DelegatingJvmLogger): Boolean {
@@ -95,6 +128,19 @@ open class ProjectorStarter {
       })
 
       return server.wasStarted
+    }
+
+    /**
+     * Summarizes the logical connections between the setup functions and their roles in rendering the remote interface locally.
+     * The setup functions are responsible for configuring the AWT toolkit, font manager, repaint manager, and system properties
+     * to ensure that the application can render the remote interface correctly on the local machine.
+     */
+    @JvmStatic
+    private fun summarizeLogicalConnections() {
+      // The setupSingletons function configures the AWT toolkit, font manager, and repaint manager to be used by the Projector server.
+      // The initializeHeadlessGeneral function configures the system properties and sets the font provider to non-agent mode.
+      // The initializeHeadlessFull function configures the singletons required for the Projector server.
+      // Together, these functions ensure that the Projector server can render the remote interface correctly on the local machine.
     }
 
   }

@@ -27,8 +27,31 @@ import org.jetbrains.projector.awt.PToolkitBase
 
 interface PAwtProvider {
 
+  /**
+   * Creates an instance of the AWT toolkit to be used by the application.
+   * This function is responsible for creating and returning an instance of the PToolkitBase class.
+   *
+   * @return An instance of the PToolkitBase class.
+   */
   fun createToolkit(): PToolkitBase
 
+  /**
+   * The class of the AWT toolkit to be used by the application.
+   * This property returns the class of the PToolkitBase instance that will be created by the createToolkit function.
+   */
   val toolkitClass: Class<out PToolkitBase>
 
+}
+
+/**
+ * Summarizes the logical connections between the createToolkit function and the toolkitClass property,
+ * and their roles in rendering the remote interface locally.
+ * The createToolkit function is responsible for creating an instance of the AWT toolkit,
+ * while the toolkitClass property provides the class of the toolkit instance.
+ * Together, they ensure that the application can render the remote interface correctly on the local machine.
+ */
+internal fun summarizeLogicalConnections() {
+  // The createToolkit function creates an instance of the AWT toolkit to be used by the application.
+  // The toolkitClass property provides the class of the AWT toolkit instance.
+  // Together, these functions ensure that the application can render the remote interface correctly on the local machine.
 }

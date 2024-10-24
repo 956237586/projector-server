@@ -35,6 +35,14 @@ abstract class ProjectorLauncherBase {
     @Suppress("Could be private")
     const val MAIN_CLASS_PROPERTY_NAME = "org.jetbrains.projector.server.classToLaunch"
 
+    /**
+     * Starts the Projector server with the specified arguments and AWT provider.
+     * This function retrieves the main class to launch from the system property,
+     * gets the main method of that class, and invokes it with the provided arguments.
+     *
+     * @param args The arguments to pass to the main method of the class to launch.
+     * @param awtProvider The AWT provider to use for the Projector server.
+     */
     @JvmStatic
     protected fun start(args: Array<String>, awtProvider: PAwtProvider) {
 
@@ -47,6 +55,14 @@ abstract class ProjectorLauncherBase {
         .invoke(null, args, awtProvider)
     }
 
+    /**
+     * Runs the Projector server with the specified AWT provider.
+     * This function retrieves the main class to launch from the system property,
+     * gets the runProjectorServer method of that class, and invokes it with the provided AWT provider.
+     *
+     * @param awtProvider The AWT provider to use for the Projector server.
+     * @return True if the server was started successfully, false otherwise.
+     */
     @JvmStatic
     protected fun runProjectorServer(awtProvider: PAwtProvider): Boolean {
 
@@ -59,12 +75,36 @@ abstract class ProjectorLauncherBase {
         .invoke(null, awtProvider) as Boolean
     }
 
+    /**
+     * Retrieves the starter class for the Projector server.
+     * This function initializes the Projector class loader and loads the ProjectorStarter class.
+     *
+     * @return The Class object representing the ProjectorStarter class.
+     */
     @JvmStatic
     private fun getStarterClass(): Class<*> {
       val thisClass = ProjectorLauncherBase::class.java
       val prjClassLoader = ProjectorClassLoaderSetup.initClassLoader(thisClass.classLoader)
 
       return prjClassLoader.loadClass("${thisClass.packageName}.ProjectorStarter")
+    }
+
+    /**
+     * Summarizes the logical connections between the start, runProjectorServer, and getStarterClass functions,
+     * and their roles in rendering the remote interface locally.
+     * The start function initializes and starts the Projector server with the specified arguments and AWT provider.
+     * The runProjectorServer function initializes and starts the Projector server with the specified AWT provider.
+     * The getStarterClass function retrieves the starter class for the Projector server.
+     * Together, these functions ensure that the Projector server is properly initialized and started,
+     * allowing the remote interface to be rendered correctly on the local machine.
+     */
+    @JvmStatic
+    private fun summarizeLogicalConnections() {
+      // The start function initializes and starts the Projector server with the specified arguments and AWT provider.
+      // The runProjectorServer function initializes and starts the Projector server with the specified AWT provider.
+      // The getStarterClass function retrieves the starter class for the Projector server.
+      // Together, these functions ensure that the Projector server is properly initialized and started,
+      // allowing the remote interface to be rendered correctly on the local machine.
     }
   }
 

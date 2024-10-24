@@ -44,6 +44,12 @@ class ProjectorDrawEventQueue(private val target: ServerDrawCommandsEvent.Target
 
   override fun buildCommand(): DrawEventQueue.CommandBuilder = CommandBuilder(target)
 
+  /**
+   * CommandBuilder is responsible for building drawing commands for the ProjectorDrawEventQueue.
+   * It collects drawing events and adds them to the command queue.
+   *
+   * @property target The target for the drawing commands.
+   */
   private class CommandBuilder(val target: ServerDrawCommandsEvent.Target) : DrawEventQueue.CommandBuilder {
 
     private val events = mutableListOf<ServerWindowEvent>()
@@ -81,6 +87,9 @@ class ProjectorDrawEventQueue(private val target: ServerDrawCommandsEvent.Target
       return this
     }
 
+    /**
+     * Builds the drawing command by adding the target and events to the command queue.
+     */
     private fun build() {
       commands.add(target to events)
       // asReversed: optimization. We expect that the last element is ServerWindowPaintEvent most of the time
@@ -172,10 +181,31 @@ class ProjectorDrawEventQueue(private val target: ServerDrawCommandsEvent.Target
 
     private fun List<Pair<Int, Int>>.toPoints() = map { (x, y) -> Point(x.toDouble(), y.toDouble()) }
 
+    /**
+     * A thread-safe queue that holds pairs of ServerDrawCommandsEvent.Target and lists of ServerWindowEvent.
+     * This queue is used to store drawing commands that need to be processed.
+     */
     val commands by SizeAware(
       ConcurrentLinkedQueue<Pair<ServerDrawCommandsEvent.Target, List<ServerWindowEvent>>>(),
       if (ProjectorServer.ENABLE_BIG_COLLECTIONS_CHECKS) ProjectorServer.BIG_COLLECTIONS_CHECKS_START_SIZE else null,
       logger,
     )
   }
+}
+
+/**
+ * Summarizes the logical connections between the CommandBuilder class, the buildCommand function, and the commands property,
+ * and their roles in rendering the remote interface locally.
+ * The CommandBuilder class is responsible for building drawing commands for the ProjectorDrawEventQueue.
+ * The buildCommand function adds the target and events to the command queue.
+ * The commands property is a thread-safe queue that holds pairs of ServerDrawCommandsEvent.Target and lists of ServerWindowEvent.
+ * Together, these components ensure that the drawing commands are properly built, added to the queue, and processed,
+ * allowing the remote interface to be rendered correctly on the local machine.
+ */
+internal fun summarizeLogicalConnections() {
+  // The CommandBuilder class is responsible for building drawing commands for the ProjectorDrawEventQueue.
+  // The buildCommand function adds the target and events to the command queue.
+  // The commands property is a thread-safe queue that holds pairs of ServerDrawCommandsEvent.Target and lists of ServerWindowEvent.
+  // Together, these components ensure that the drawing commands are properly built, added to the queue, and processed,
+  // allowing the remote interface to be rendered correctly on the local machine.
 }
