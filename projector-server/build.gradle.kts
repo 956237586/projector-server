@@ -30,6 +30,28 @@ plugins {
 
 applyCommonServerConfiguration(application)
 
+//dependencies {
+//  implementation("$projectorClientGroup:projector-common:$projectorClientVersion")
+//  implementation("$projectorClientGroup:projector-ij-common:$projectorClientVersion")
+//  implementation("$projectorClientGroup:projector-server-core:$projectorClientVersion")
+//  implementation("$projectorClientGroup:projector-util-loading:$projectorClientVersion")
+//  implementation("$projectorClientGroup:projector-util-logging:$projectorClientVersion")
+//  api(project(":projector-awt"))
+//
+//  if (intellijPlatformBuildNumber >= BuildNumber.fromString("203.5981.165")!!) {
+//    compileOnly("com.jetbrains.intellij.platform:code-style:$intellijPlatformVersion")
+//  } else {
+//    compileOnly("com.jetbrains.intellij.platform:lang:$intellijPlatformVersion")
+//  }
+//
+//  compileOnly("com.jetbrains.intellij.platform:core-ui:$intellijPlatformVersion")
+//  compileOnly("com.jetbrains.intellij.platform:ide-impl:$intellijPlatformVersion")
+//  compileOnly("org.jetbrains.intellij.deps.jcef:jcef:$intellijJcefVersion")
+//
+//  testImplementation("org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion")
+//  testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
+//  testImplementation("com.jetbrains.intellij.platform:core:$intellijPlatformVersion")
+//}
 kotlin {
   jvmToolchain {
     (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(11))
