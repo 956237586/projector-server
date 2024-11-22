@@ -196,7 +196,7 @@ class ProjectorServer private constructor(
           previousWindowEvents = emptySet()
           caretInfoUpdater.createCaretInfoEvent()
           PanelUpdater.updateAll()
-          updateCefBrowsersSafely()
+          //updateCefBrowsersSafely()
         }
 
         is ReadyClientSettings -> {
@@ -309,7 +309,7 @@ class ProjectorServer private constructor(
           icons = window.icons?.map { it as ImageId },
           isShowing = window.target.isShowing,
           zOrder = i,
-          bounds = window.target.shiftBounds(PGraphicsEnvironment.defaultDevice.clientShift),
+          bounds = window.target.bounds.shift(PGraphicsEnvironment.defaultDevice.clientShift),
           headerHeight = window.headerHeight,
           cursorType = window.cursor?.type?.toCursorType(),
           resizable = window.resizable,

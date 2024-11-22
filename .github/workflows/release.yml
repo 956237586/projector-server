@@ -22,7 +22,7 @@ jobs:
           java-version: '11'
       - name: Build project
         run: |
-          ./gradlew :projector-server:distZip -Pversion=${{steps.version_str.outputs.VERSION_STR }} -PcodingArtifactsGradleUsername=${{ secrets.MAVEN_USERNAME }} -PcodingArtifactsGradlePassword=${{ secrets.MAVEN_PASSWORD }}
+          ./gradlew clean :projector-server:distZip -Pversion=${{steps.version_str.outputs.VERSION_STR }} -PcodingArtifactsGradleUsername=${{ secrets.MAVEN_USERNAME }} -PcodingArtifactsGradlePassword=${{ secrets.MAVEN_PASSWORD }}
           cd projector-server/build/distributions
           find . -maxdepth 1 -type f -name projector-server-*.zip -exec mv {} projector-server.zip \;
       - name: Create Release

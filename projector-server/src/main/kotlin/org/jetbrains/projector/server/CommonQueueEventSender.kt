@@ -25,7 +25,7 @@
 
 package org.jetbrains.projector.server
 
-import org.jetbrains.projector.awt.peer.PComponentPeer
+import org.jetbrains.projector.awt.peer.base.PComponentPeerBase
 import org.jetbrains.projector.common.EventSender
 import org.jetbrains.projector.common.event.BrowserShowEventPart
 import org.jetbrains.projector.common.event.ServerEventPart
@@ -55,7 +55,7 @@ class CommonQueueEventSender : EventSender {
   private val Component.pWindowId: Int?
     get() = let {
       val root = SwingUtilities.getRoot(it) ?: return@let null
-      val peer = AWTAccessor.getComponentAccessor().getPeer<ComponentPeer>(root) as? PComponentPeer ?: return@let null
+      val peer = AWTAccessor.getComponentAccessor().getPeer<ComponentPeer>(root) as? PComponentPeerBase ?: return@let null
       peer.pWindow.id
     }
 }
